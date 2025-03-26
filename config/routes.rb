@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "pages/show"
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   devise_for :users
@@ -14,4 +15,12 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  # Pages routes
+  get '/pages/:slug', to: 'pages#show', as: 'page'
+  
+  # Set about and contact page routes
+  get '/about', to: 'pages#show', defaults: { slug: 'about' }
+  get '/contact', to: 'pages#show', defaults: { slug: 'contact' }
+  
+  root to: 'products#index'
 end
