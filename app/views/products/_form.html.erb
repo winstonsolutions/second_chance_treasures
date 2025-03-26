@@ -1,0 +1,58 @@
+<%= form_with(model: product, local: true) do |form| %>
+  <!-- Display validation errors if any -->
+  <% if product.errors.any? %>
+    <div class="error-messages">
+      <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
+      <ul>
+        <% product.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Form fields updated to match model attributes -->
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description, rows: 5 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :price %>
+    <%= form.number_field :price, step: 0.01 %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :condition %>
+    <%= form.select :condition, ['New', 'Like New', 'Good', 'Fair', 'Poor'], { prompt: "Select condition" } %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :quantity %>
+    <%= form.number_field :quantity, min: 0 %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :sku %>
+    <%= form.text_field :sku %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :is_featured %>
+    <%= form.check_box :is_featured %>
+  </div>
+
+  <div class="field">
+    <%= form.label :product_category_id %>
+    <%= form.collection_select :product_category_id, ProductCategory.all, :id, :name, { prompt: "Select a category" } %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit class: 'button' %>
+  </div>
+<% end %> 

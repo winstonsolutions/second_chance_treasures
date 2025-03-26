@@ -23,4 +23,7 @@ Rails.application.routes.draw do
   get '/contact', to: 'pages#show', defaults: { slug: 'contact' }
   
   root to: 'products#index'
+
+  # Add resources for products
+  resources :products
 end

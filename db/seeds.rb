@@ -37,3 +37,42 @@ end
       puts "Created #{page_name} page"
     end
   end
+
+# Create categories
+categories = [
+  { name: 'Furniture', description: 'Gently used furniture items for your home' },
+  { name: 'Electronics', description: 'Pre-owned electronics in good working condition' },
+  { name: 'Clothing', description: 'Quality second-hand clothing and accessories' },
+  { name: 'Books', description: 'Used books in good condition' }
+]
+
+categories.each do |category_data|
+  Category.find_or_create_by(name: category_data[:name]) do |category|
+    category.description = category_data[:description]
+    puts "Created category: #{category.name}"
+  end
+end
+
+# Get created categories
+all_categories = Category.all
+
+# Create products with Faker
+conditions = ['Like New', 'Good', 'Fair', 'Poor']
+
+if Product.count < 100
+  100.times do |i|
+    product = Product.create!(
+      title: Faker::Commerce.product_name,
+      description: Faker::Lorem.paragraph(sentence_count: 5),
+      price: Faker::Commerce.price(range: 5.0..500.0),
+      condition: conditions.sample,
+      quantity: Faker::Number.between(from: 1, to: 10),
+      sku: "SKU-#{Faker::Alphanumeric.alphanumeric(number: 8).upcase}",
+      is_featured: [true, false].sample
+    )
+    
+    # Associate with 1-3 random categories
+    product.categories << all_categories.sample(rand(1..3))
+    puts "Created product ##{i+1}: #{product.title}"
+  end
+end

@@ -1,0 +1,10 @@
+<h1>Edit Product</h1>
+
+<!-- Render the form partial -->
+<%= render 'form', product: @product %>
+
+<div class="actions">
+  <!-- Navigation links -->
+  <%= link_to 'Show', @product, class: 'button' %> |
+  <%= link_to 'Back to All Products', products_path, class: 'button' %>
+</div> 
