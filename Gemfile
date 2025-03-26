@@ -58,3 +58,23 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+# For admin interface
+gem 'activeadmin'
+gem 'devise'
+
+# For pagination
+gem 'kaminari'
+
+# For file uploads and image processing
+gem 'image_processing'
+
+# For payment processing
+gem 'stripe'
+
+# For dummy data generation
+gem 'faker'
+
+# For better styling
+gem 'sassc-rails'
+gem 'bootstrap', '~> 5.2.0'
