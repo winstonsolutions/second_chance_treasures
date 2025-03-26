@@ -1,5 +1,5 @@
 ActiveAdmin.register Product do
-  permit_params :title, :description, :price, :condition, :quantity, :sku, :is_featured, :image
+  permit_params :title, :description, :price, :condition, :quantity, :sku, :is_featured, :image, category_ids: []
 
   form do |f|
     f.inputs do
@@ -11,6 +11,7 @@ ActiveAdmin.register Product do
       f.input :sku
       f.input :is_featured
       f.input :image, as: :file
+      f.input :categories, as: :check_boxes
     end
     f.actions
   end
