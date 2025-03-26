@@ -1,0 +1,11 @@
+<!-- app/views/shared/_categories_menu.html.erb -->
+<div class="dropdown">
+  <button class="btn btn-outline-primary dropdown-toggle" type="button" id="categoriesDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+    Browse Categories
+  </button>
+  <ul class="dropdown-menu shadow-sm" aria-labelledby="categoriesDropdown">
+    <% Category.all.each do |category| %>
+      <%= link_to category.name, category_path(category), class: "dropdown-item" %>
+    <% end %>
+  </ul>
+</div>

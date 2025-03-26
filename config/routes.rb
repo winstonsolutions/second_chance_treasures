@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "categories/show"
   get "pages/show"
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
@@ -22,8 +23,14 @@ Rails.application.routes.draw do
   get '/about', to: 'pages#show', defaults: { slug: 'about' }
   get '/contact', to: 'pages#show', defaults: { slug: 'contact' }
   
+  
+  # Add resources for products
+  resources :products, only: [:index, :show]
+  resources :categories, only: [:show]
+
+  # 添加购物车路由
+  get '/cart', to: 'carts#show', as: 'cart'
+
   root to: 'products#index'
 
-  # Add resources for products
-  resources :products
 end

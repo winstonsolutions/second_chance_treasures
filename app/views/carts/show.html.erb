@@ -1,0 +1,12 @@
+<div class="container mt-4">
+  <h1>Shopping Cart</h1>
+  
+  <% if @cart_items.empty? %>
+    <div class="alert alert-info">
+      Your cart is empty.
+    </div>
+    <%= link_to "Continue Shopping", root_path, class: "btn btn-primary" %>
+  <% else %>
+    <%# Display cart contents here %>
+  <% end %>
+</div> 

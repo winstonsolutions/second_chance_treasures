@@ -1,0 +1,36 @@
+<!-- app/views/categories/show.html.erb -->
+<div class="container mt-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><%= link_to "Home", root_path %></li>
+      <li class="breadcrumb-item active" aria-current="page"><%= @category.name %></li>
+    </ol>
+  </nav>
+
+  <h1><%= @category.name %></h1>
+  <p class="lead"><%= @category.description %></p>
+  
+  <div class="row">
+    <% @products.each do |product| %>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <% if product.image.attached? %>
+            <%= image_tag product.image.variant(resize_to_limit: [300, 300]), class: 'card-img-top' %>
+          <% else %>
+            <div class="no-image text-center p-5 bg-light">No Image</div>
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title"><%= product.title %></h5>
+            <p class="card-text"><%= number_to_currency(product.price) %></p>
+            <p class="card-text"><small class="text-muted">Condition: <%= product.condition %></small></p>
+            <%= link_to "View Details", product_path(product), class: "btn btn-primary" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  
+  <div class="pagination justify-content-center">
+    <%= paginate @products %>
+  </div>
+</div>

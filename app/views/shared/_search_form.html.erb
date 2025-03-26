@@ -1,0 +1,8 @@
+<%# 这个局部视图包含搜索产品的表单 %>
+<%= form_with url: products_path, method: :get, class: "d-flex" do |f| %>
+  <%= f.text_field :query, 
+                   placeholder: "搜索产品...", 
+                   class: "form-control me-2", 
+                   value: params[:query] %>
+  <%= f.submit "搜索", class: "btn btn-outline-success" %>
+<% end %> 

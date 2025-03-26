@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
   # Index action - displays a list of all products
   def index
-    @products = Product.all
+    @products = Product.all.page(params[:page]).per(12)
   end
 
   # Show action - displays a specific product based on ID
