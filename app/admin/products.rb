@@ -1,17 +1,45 @@
 ActiveAdmin.register Product do
-  permit_params :title, :description, :price, :condition, :quantity, :sku, :is_featured, :image, category_ids: []
+  permit_params :title, :description, :price, :quantity, :category_id, :on_sale, :sale_price, images: []
+
+  index do
+    selectable_column
+    id_column
+    column :title
+    column :price do |product|
+      number_to_currency product.price
+    end
+    column :quantity
+    column :category
+    column :on_sale
+    column :sale_price do |product|
+      number_to_currency product.sale_price if product.sale_price.present?
+    end
+    column "Images" do |product|
+      ul do
+        product.images.each do |img|
+          li image_tag(img.variant(resize_to_limit: [100, 100])) if img.attached?
+        end
+      end
+    end
+    actions
+  end
+
+  filter :title
+  filter :price
+  filter :category
+  filter :on_sale
+  filter :created_at
 
   form do |f|
-    f.inputs do
+    f.inputs "Product Details" do
       f.input :title
-      f.input :description
+      f.input :description, as: :text
       f.input :price
-      f.input :condition, as: :select, collection: ['Like New', 'Good', 'Fair', 'Poor']
       f.input :quantity
-      f.input :sku
-      f.input :is_featured
-      f.input :image, as: :file
-      f.input :categories, as: :check_boxes
+      f.input :category
+      f.input :on_sale
+      f.input :sale_price
+      f.input :images, as: :file, input_html: { multiple: true }, hint: "可以选择多张图片"
     end
     f.actions
   end
@@ -20,13 +48,23 @@ ActiveAdmin.register Product do
     attributes_table do
       row :title
       row :description
-      row :price
-      row :condition
+      row :price do |product|
+        number_to_currency product.price
+      end
       row :quantity
-      row :sku
-      row :is_featured
-      row :image do |product|
-        image_tag product.image.variant(resize_to_limit: [300, 300]) if product.image.attached?
+      row :category
+      row :on_sale
+      row :sale_price do |product|
+        number_to_currency product.sale_price if product.sale_price.present?
+      end
+      row :created_at
+      row :updated_at
+      row :images do |product|
+        ul do
+          product.images.each do |img|
+            li image_tag(img.variant(resize_to_limit: [200, 200])) if img.attached?
+          end
+        end
       end
     end
   end

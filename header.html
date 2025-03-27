@@ -1,0 +1,15 @@
+<!-- 在导航栏中添加管理员面板链接 -->
+<nav>
+    <a href="/">Home</a>
+    <a href="/browse">Browse Categories</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
+    
+    <!-- 添加管理员链接，仅对管理员显示 -->
+    <% if (user && user.role === 'admin') { %>
+        <a href="/admin/dashboard" class="admin-link">管理面板</a>
+    <% } %>
+    
+    <a href="/account">My Account</a>
+    <a href="/logout">Logout</a>
+</nav> 

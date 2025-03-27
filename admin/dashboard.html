@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员控制面板</title>
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <header>
+        <h1>管理员控制面板</h1>
+        <nav>
+            <ul>
+                <li><a href="/admin/dashboard">首页</a></li>
+                <li><a href="/admin/products">产品管理</a></li>
+                <li><a href="/admin/users">用户管理</a></li>
+                <li><a href="/logout">退出登录</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="dashboard-stats">
+            <h2>网站统计</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>产品总数</h3>
+                    <p class="stat-number">123</p>
+                </div>
+                <div class="stat-card">
+                    <h3>用户总数</h3>
+                    <p class="stat-number">456</p>
+                </div>
+                <div class="stat-card">
+                    <h3>订单总数</h3>
+                    <p class="stat-number">789</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="recent-activity">
+            <h2>最近活动</h2>
+            <ul>
+                <li>用户xiaoming购买了产品A</li>
+                <li>新用户zhangsan注册了账号</li>
+                <li>管理员更新了产品B的价格</li>
+            </ul>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 我的电商网站 管理系统</p>
+    </footer>
+    
+    <script src="/js/admin.js"></script>
+</body>
+</html> 

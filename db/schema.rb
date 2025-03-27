@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_26_163801) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_27_234833) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -99,6 +99,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_26_163801) do
     t.boolean "is_featured"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "sale_price", precision: 10, scale: 2
+    t.boolean "on_sale", default: false
   end
 
   create_table "users", force: :cascade do |t|

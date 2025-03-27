@@ -101,6 +101,11 @@ GEM
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 2.11.6, < 3)
       sassc-rails (>= 2.0.0)
+    bootstrap-icons (1.0.14)
+      nokogiri (~> 1)
+    bootstrap-icons-helper (2.0.2)
+      bootstrap-icons (~> 1)
+      rails (>= 7.0)
     brakeman (7.0.0)
       racc
     builder (3.3.0)
@@ -413,6 +418,7 @@ DEPENDENCIES
   activeadmin
   bootsnap
   bootstrap (~> 5.2.0)
+  bootstrap-icons-helper
   brakeman
   capybara
   debug
