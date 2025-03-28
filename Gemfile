@@ -78,5 +78,5 @@ gem 'faker'
 
 # For better styling
 gem 'sassc-rails'
-gem 'bootstrap', '~> 5.2.0'
+gem 'bootstrap', '~> 5.3.3'
 gem 'bootstrap-icons-helper'
