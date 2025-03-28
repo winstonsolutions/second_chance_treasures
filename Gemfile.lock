@@ -425,10 +425,11 @@ DEPENDENCIES
   devise
   error_highlight (>= 0.4.0)
   faker
-  image_processing
+  image_processing (~> 1.2)
   importmap-rails
   jbuilder
   kaminari
+  mini_magick
   puma (>= 5.0)
   rails (~> 7.2.2, >= 7.2.2.1)
   rubocop-rails-omakase

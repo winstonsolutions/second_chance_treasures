@@ -14,34 +14,34 @@
   <!-- Form fields updated to match model attributes -->
   <div class="field">
     <%= form.label :title %>
-    <%= form.text_field :title %>
+    <%= form.text_field :title, required: true %>
   </div>
 
   <div class="field">
     <%= form.label :description %>
-    <%= form.text_area :description, rows: 5 %>
+    <%= form.text_area :description, required: true %>
   </div>
 
   <div class="field">
     <%= form.label :price %>
-    <%= form.number_field :price, step: 0.01 %>
+    <%= form.number_field :price, step: '0.01', min: '0.01', required: true %>
   </div>
-  
+
   <div class="field">
     <%= form.label :condition %>
-    <%= form.select :condition, ['New', 'Like New', 'Good', 'Fair', 'Poor'], { prompt: "Select condition" } %>
+    <%= form.select :condition, ['Like New', 'Good', 'Fair', 'Poor'], { prompt: "Select condition" }, required: true %>
   </div>
-  
+
   <div class="field">
     <%= form.label :quantity %>
-    <%= form.number_field :quantity, min: 0 %>
+    <%= form.number_field :quantity, min: 0, required: true %>
   </div>
-  
+
   <div class="field">
     <%= form.label :sku %>
-    <%= form.text_field :sku %>
+    <%= form.text_field :sku, required: true %>
   </div>
-  
+
   <div class="field">
     <%= form.label :is_featured %>
     <%= form.check_box :is_featured %>
@@ -52,7 +52,22 @@
     <%= form.collection_select :product_category_id, ProductCategory.all, :id, :name, { prompt: "Select a category" } %>
   </div>
 
+  <div class="field">
+    <%= form.label :categories %>
+    <%= form.collection_check_boxes :category_ids, Category.all, :id, :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :image %>
+    <%= form.file_field :image %>
+  </div>
+
+  <div class="field">
+    <%= form.label :images %>
+    <%= form.file_field :images, multiple: true %>
+  </div>
+
   <div class="actions">
     <%= form.submit class: 'button' %>
   </div>
-<% end %> 
+<% end %>

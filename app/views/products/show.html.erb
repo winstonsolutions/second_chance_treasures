@@ -10,9 +10,17 @@
   <div class="row">
     <div class="col-md-6">
       <% if @product.image.attached? %>
-        <%= image_tag @product.image.variant(resize_to_limit: [500, 500]), class: 'img-fluid' %>
+        <%= image_tag @product.image.variant(:medium).processed, class: 'img-fluid' %>
       <% else %>
         <div class="no-image text-center p-5 bg-light">No Image</div>
+      <% end %>
+
+      <% if @product.images.attached? %>
+        <div class="product-gallery mt-3">
+          <% @product.images.each do |image| %>
+            <%= image_tag image.variant(:thumb).processed, class: 'img-thumbnail m-1' %>
+          <% end %>
+        </div>
       <% end %>
     </div>
     <div class="col-md-6">
@@ -20,7 +28,7 @@
       <p class="lead"><%= number_to_currency(@product.price) %></p>
       <p><strong>Condition:</strong> <%= @product.condition %></p>
       <p><strong>SKU:</strong> <%= @product.sku %></p>
-      <p><strong>Categories:</strong> 
+      <p><strong>Categories:</strong>
         <% @product.categories.each do |category| %>
           <%= link_to category.name, category_path(category), class: "badge bg-secondary" %>
         <% end %>
@@ -29,7 +37,7 @@
         <h3>Description</h3>
         <p><%= @product.description %></p>
       </div>
-      
+
       <% if @product.quantity > 0 %>
         <%= form_with url: add_to_cart_path(@product), method: :post, class: 'mt-4' do |f| %>
           <div class="input-group mb-3">
@@ -42,3 +50,4 @@
       <% end %>
     </div>
   </div>
+</div>

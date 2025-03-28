@@ -18,14 +18,14 @@ Rails.application.routes.draw do
   # root "posts#index"
   # Pages routes
   get '/pages/:slug', to: 'pages#show', as: 'page'
-  
+
   # Set about and contact page routes
   get '/about', to: 'pages#show', defaults: { slug: 'about' }
   get '/contact', to: 'pages#show', defaults: { slug: 'contact' }
-  
-  
+
+
   # Add resources for products
-  resources :products, only: [:index, :show]
+  resources :products, only: [:index, :show, :new, :create]
   resources :categories, only: [:show]
 
   # 添加购物车路由

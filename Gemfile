@@ -31,8 +31,10 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
-# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+# Use Active Storage variants
+gem "image_processing", "~> 1.2"
+# 如果使用 ImageMagick
+gem "mini_magick"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -67,7 +69,6 @@ gem 'devise'
 gem 'kaminari'
 
 # For file uploads and image processing
-gem 'image_processing'
 
 # For payment processing
 gem 'stripe'
