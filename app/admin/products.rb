@@ -1,5 +1,6 @@
 ActiveAdmin.register Product do
-  permit_params :title, :description, :price, :quantity, :category_id, :on_sale, :sale_price, images: []
+  permit_params :title, :description, :price, :quantity, :on_sale, :sale_price,
+                :images, category_ids: []
 
   index do
     selectable_column
@@ -9,7 +10,7 @@ ActiveAdmin.register Product do
       number_to_currency product.price
     end
     column :quantity
-    column :category
+    column :categories
     column :on_sale
     column :sale_price do |product|
       number_to_currency product.sale_price if product.sale_price.present?
@@ -26,7 +27,7 @@ ActiveAdmin.register Product do
 
   filter :title
   filter :price
-  filter :category
+  filter :categories
   filter :on_sale
   filter :created_at
 
@@ -36,7 +37,7 @@ ActiveAdmin.register Product do
       f.input :description, as: :text
       f.input :price
       f.input :quantity
-      f.input :category
+      f.input :categories, as: :select, collection: Category.all
       f.input :on_sale
       f.input :sale_price
       f.input :images, as: :file, input_html: { multiple: true }, hint: "可以选择多张图片"
@@ -52,7 +53,7 @@ ActiveAdmin.register Product do
         number_to_currency product.price
       end
       row :quantity
-      row :category
+      row :categories
       row :on_sale
       row :sale_price do |product|
         number_to_currency product.sale_price if product.sale_price.present?

@@ -7,7 +7,7 @@ class Product < ApplicationRecord
 
     validates :title, presence: true
     validates :description, presence: true
-    validates :price, presence: true, numericality: { greater_than: 0 }
+    validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.01 }
     validates :condition, presence: true
     validates :quantity, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     validates :sku, presence: true, uniqueness: true
@@ -18,8 +18,8 @@ class Product < ApplicationRecord
          "on_sale", "price", "quantity", "sale_price", "sku", "title", "updated_at"]
     end
 
-    # 如果你使用了关联搜索（比如通过category），还需要添加：
+    # 定义可搜索的关联
     def self.ransackable_associations(auth_object = nil)
-        ["category"]
+        ["categories", "product_categories"]  # 添加所有需要搜索的关联
     end
 end
