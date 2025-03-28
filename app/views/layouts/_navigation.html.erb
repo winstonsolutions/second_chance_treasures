@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <%= link_to "SecondChance Treasures", root_path, class: "navbar-brand" %>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <%= link_to "Home", root_path, class: "nav-link" %>
+        </li>
+
+        <%= render 'shared/categories_menu' %>
+
+        <li class="nav-item">
+          <%= link_to "About", about_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "Contact", contact_path, class: "nav-link" %>
+        </li>
+      </ul>
+
+      <div class="d-flex">
+        <%= render 'shared/search_form' if content_for?(:search_form) %>
+
+        <% if user_signed_in? %>
+          <%= link_to "My Account", "#", class: "btn btn-outline-secondary ms-2" %>
+          <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "btn btn-outline-danger ms-2" %>
+        <% else %>
+          <%= link_to "Login", new_user_session_path, class: "btn btn-outline-secondary ms-2" %>
+          <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-outline-secondary ms-2" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</nav>

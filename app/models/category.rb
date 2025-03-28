@@ -4,6 +4,18 @@ class Category < ApplicationRecord
 
     validates :name, presence: true, uniqueness: true
 
+    scope :active, -> {
+        if column_names.include?('active')
+            where(active: true)
+        else
+            all
+        end
+    }
+
+    def self.menu_categories
+        order(:name)
+    end
+
     # 定义可搜索属性
     def self.ransackable_attributes(auth_object = nil)
         ["id", "name", "created_at", "updated_at"]

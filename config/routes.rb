@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get "categories/show"
   get "pages/show"
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
