@@ -1,0 +1,22 @@
+.main-image {
+  border: 1px solid #ddd;
+  padding: 10px;
+  background: white;
+}
+
+.thumbnail-images {
+  gap: 10px;
+}
+
+.thumbnail-image img {
+  transition: opacity 0.3s ease;
+}
+
+.no-image {
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+}

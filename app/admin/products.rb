@@ -60,7 +60,7 @@ ActiveAdmin.register Product do
     f.actions
   end
 
-  show do
+  show do |product|
     attributes_table do
       row :title
       row :description
@@ -77,31 +77,30 @@ ActiveAdmin.register Product do
       end
       row :created_at
       row :updated_at
-      row :images do |product|
-        ul class: 'image-list' do
-          product.images.each do |img|
-            begin
-              li class: 'image-item' do
-                image_tag img.variant(:medium).processed
-              end
-            rescue StandardError => e
-              Rails.logger.error "Error displaying image: #{e.message}"
-              content_tag(:span, "图片加载错误")
-            end
-          end
+
+      row "Main Image" do |product|
+        if product.image.attached?
+          image_tag(rails_blob_url(product.image), size: '300x300')
+        else
+          "No main image attached"
         end
       end
-      row :image do |product|
-        if product.image.attached?
-          begin
-            image_tag product.image.variant(:medium).processed, style: 'max-width: 300px'
-          rescue StandardError => e
-            Rails.logger.error "Error displaying image: #{e.message}"
-            content_tag(:span, "图片加载错误")
+
+      row "Additional Images" do |product|
+        if product.images.attached?
+          div do
+            product.images.each do |image|
+              span do
+                image_tag(rails_blob_url(image), size: '100x100', style: 'margin-right: 10px;')
+              end
+            end
           end
+        else
+          "No additional images attached"
         end
       end
     end
+    active_admin_comments
   end
 
   controller do

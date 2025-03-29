@@ -60,19 +60,42 @@ all_categories = Category.all
 conditions = ['Like New', 'Good', 'Fair', 'Poor']
 
 if Product.count < 100
-  100.times do |i|
-    product = Product.create!(
-      title: Faker::Commerce.product_name,
-      description: Faker::Lorem.paragraph(sentence_count: 5),
-      price: Faker::Commerce.price(range: 5.0..500.0),
-      condition: conditions.sample,
-      quantity: Faker::Number.between(from: 1, to: 10),
-      sku: "SKU-#{Faker::Alphanumeric.alphanumeric(number: 8).upcase}",
-      is_featured: [true, false].sample
-    )
-    
-    # Associate with 1-3 random categories
-    product.categories << all_categories.sample(rand(1..3))
-    puts "Created product ##{i+1}: #{product.title}"
+  ActiveRecord::Base.transaction do
+    all_categories.each do |category|
+      25.times do |i|
+        begin
+          product_name = case category.name
+          when 'Furniture'
+            ["Sofa", "Dining Table", "Bed", "Wardrobe", "Desk"].sample
+          when 'Electronics'
+            ["Smartphone", "Laptop", "Tablet", "Smart Watch", "Headphones"].sample
+          when 'Clothing'
+            color = ["Black", "White", "Blue", "Red", "Gray"].sample
+            item = ["T-shirt", "Jeans", "Dress", "Jacket", "Shirt"].sample
+            "#{color} #{item}"
+          when 'Books'
+            ["The Great Gatsby", "To Kill a Mockingbird", "1984", "Pride and Prejudice", "The Catcher in the Rye"].sample
+          else
+            Faker::Commerce.product_name
+          end
+
+          product = Product.create!(
+            title: product_name,
+            description: Faker::Lorem.paragraph(sentence_count: 5),
+            price: Faker::Commerce.price(range: 5.0..500.0),
+            condition: conditions.sample,
+            quantity: Faker::Number.between(from: 1, to: 10),
+            sku: "SKU-#{category.name[0..2].upcase}-#{Faker::Alphanumeric.alphanumeric(number: 8).upcase}",
+            is_featured: [true, false].sample
+          )
+
+          product.categories << category
+          puts "Created #{category.name} product ##{i+1}: #{product.title}"
+        rescue => e
+          puts "Error creating product for #{category.name}: #{e.message}"
+          raise ActiveRecord::Rollback
+        end
+      end
+    end
   end
 end

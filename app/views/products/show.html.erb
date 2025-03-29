@@ -9,41 +9,54 @@
 
   <div class="row">
     <div class="col-md-6">
-      <% if @product.image.attached? %>
-        <%= image_tag @product.image.variant(:medium).processed, class: 'img-fluid' %>
-      <% else %>
-        <div class="no-image text-center p-5 bg-light">No Image</div>
-      <% end %>
+      <!-- 主图片显示区域 -->
+      <div class="main-image mb-3">
+        <% if @product.image.attached? %>
+          <%= image_tag @product.image.variant(:medium), class: 'img-fluid main-product-image' %>
+        <% elsif @product.images.attached? %>
+          <%= image_tag @product.images.first.variant(:medium), class: 'img-fluid main-product-image' %>
+        <% else %>
+          <div class="no-image text-center p-5 bg-light">
+            <span>No Image Available</span>
+          </div>
+        <% end %>
+      </div>
 
+      <!-- 附加图片缩略图区域 -->
       <% if @product.images.attached? %>
-        <div class="product-gallery mt-3">
+        <div class="thumbnail-images d-flex flex-wrap">
           <% @product.images.each do |image| %>
-            <%= image_tag image.variant(:thumb).processed, class: 'img-thumbnail m-1' %>
+            <div class="thumbnail-image m-2">
+              <%= image_tag image.variant(:thumb), class: 'img-thumbnail', style: 'width: 100px; height: 100px; object-fit: cover;' %>
+            </div>
           <% end %>
         </div>
       <% end %>
     </div>
+
     <div class="col-md-6">
       <h1><%= @product.title %></h1>
       <p class="lead"><%= number_to_currency(@product.price) %></p>
-      <p><strong>Condition:</strong> <%= @product.condition %></p>
-      <p><strong>SKU:</strong> <%= @product.sku %></p>
-      <p><strong>Categories:</strong>
-        <% @product.categories.each do |category| %>
-          <%= link_to category.name, category_path(category), class: "badge bg-secondary" %>
-        <% end %>
-      </p>
-      <div class="description">
+
+      <div class="product-details mb-4">
+        <p><strong>Condition:</strong> <%= @product.condition %></p>
+        <p><strong>SKU:</strong> <%= @product.sku %></p>
+        <p><strong>Categories:</strong>
+          <%= @product.categories.map(&:name).join(', ') %>
+        </p>
+      </div>
+
+      <div class="description mb-4">
         <h3>Description</h3>
         <p><%= @product.description %></p>
       </div>
 
       <% if @product.quantity > 0 %>
-        <%= form_with url: add_to_cart_path(@product), method: :post, class: 'mt-4' do |f| %>
-          <div class="input-group mb-3">
-            <%= f.number_field :quantity, value: 1, min: 1, max: @product.quantity, class: 'form-control' %>
-            <%= f.submit "Add to Cart", class: "btn btn-primary" %>
+        <%= form_tag add_to_cart_path(@product), method: :post, class: 'mb-4' do %>
+          <div class="form-group">
+            <%= number_field_tag :quantity, 1, min: 1, max: @product.quantity, class: 'form-control w-25 mb-3' %>
           </div>
+          <%= submit_tag 'Add to Cart', class: 'btn btn-primary' %>
         <% end %>
       <% else %>
         <div class="alert alert-warning">Out of Stock</div>
@@ -51,3 +64,33 @@
     </div>
   </div>
 </div>
+
+<% content_for :styles do %>
+  <style>
+    .main-product-image {
+      max-height: 500px;
+      width: 100%;
+      object-fit: contain;
+    }
+    .thumbnail-image img:hover {
+      cursor: pointer;
+      opacity: 0.8;
+    }
+  </style>
+<% end %>
+
+<% content_for :scripts do %>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 点击缩略图切换主图
+      const thumbnails = document.querySelectorAll('.thumbnail-image img');
+      const mainImage = document.querySelector('.main-product-image');
+
+      thumbnails.forEach(thumb => {
+        thumb.addEventListener('click', function() {
+          mainImage.src = this.src.replace('thumb', 'medium');
+        });
+      });
+    });
+  </script>
+<% end %>

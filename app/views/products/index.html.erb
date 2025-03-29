@@ -8,7 +8,7 @@
 
   <!-- Add a short introduction paragraph -->
   <p class="lead mb-4">Browse our curated selection of quality second-hand items to add practicality and joy to your life, while contributing to environmental sustainability.</p>
-  
+
   <!-- Product list using responsive grid layout -->
   <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
     <% @products.each do |product| %>
@@ -16,13 +16,15 @@
         <div class="card h-100 shadow-sm hover-card">
           <!-- Product image -->
           <% if product.image.attached? %>
-            <%= image_tag product.image, class: "card-img-top product-img", alt: product.title %>
+            <%= image_tag product.image.variant(:medium), class: 'card-img-top', style: 'height: 300px; object-fit: cover;' %>
+          <% elsif product.images.attached? %>
+            <%= image_tag product.images.first.variant(:medium), class: 'card-img-top', style: 'height: 300px; object-fit: cover;' %>
           <% else %>
-            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
-              <p class="text-muted">No Image</p>
+            <div class="no-image text-center p-5 bg-light">
+              <span>No Image Available</span>
             </div>
           <% end %>
-          
+
           <!-- Product information -->
           <div class="card-body">
             <h5 class="card-title"><%= product.title %></h5>
@@ -34,7 +36,7 @@
             </div>
             <p class="card-text text-truncate"><%= product.description %></p>
           </div>
-          
+
           <!-- Card footer -->
           <div class="card-footer bg-white border-top-0">
             <div class="d-grid gap-2">
@@ -45,7 +47,7 @@
       </div>
     <% end %>
   </div>
-  
+
   <div class="pagination justify-content-center">
     <%= paginate @products %>
   </div>

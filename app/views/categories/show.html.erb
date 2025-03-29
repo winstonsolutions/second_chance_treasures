@@ -9,15 +9,19 @@
 
   <h1><%= @category.name %></h1>
   <p class="lead"><%= @category.description %></p>
-  
+
   <div class="row">
     <% @products.each do |product| %>
       <div class="col-md-4 mb-4">
         <div class="card h-100">
           <% if product.image.attached? %>
-            <%= image_tag product.image.variant(resize_to_limit: [300, 300]), class: 'card-img-top' %>
+            <%= image_tag product.image.variant(:medium), class: 'card-img-top', style: 'height: 300px; object-fit: cover;' %>
+          <% elsif product.images.attached? %>
+            <%= image_tag product.images.first.variant(:medium), class: 'card-img-top', style: 'height: 300px; object-fit: cover;' %>
           <% else %>
-            <div class="no-image text-center p-5 bg-light">No Image</div>
+            <div class="no-image text-center p-5 bg-light">
+              <span>No Image Available</span>
+            </div>
           <% end %>
           <div class="card-body">
             <h5 class="card-title"><%= product.title %></h5>
@@ -29,8 +33,26 @@
       </div>
     <% end %>
   </div>
-  
+
   <div class="pagination justify-content-center">
     <%= paginate @products %>
   </div>
 </div>
+
+<% content_for :styles do %>
+  <style>
+    .card-img-top {
+      height: 300px;
+      object-fit: cover;
+    }
+
+    .no-image {
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f8f9fa;
+      color: #6c757d;
+    }
+  </style>
+<% end %>
