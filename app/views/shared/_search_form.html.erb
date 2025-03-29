@@ -1,8 +1,19 @@
 <%# 这个局部视图包含搜索产品的表单 %>
-<%= form_with url: products_path, method: :get, class: "d-flex" do |f| %>
-  <%= f.text_field :query, 
-                   placeholder: "搜索产品...", 
-                   class: "form-control me-2", 
-                   value: params[:query] %>
-  <%= f.submit "搜索", class: "btn btn-outline-success" %>
-<% end %> 
+<%= form_with url: products_path, method: :get, class: "d-flex flex-wrap gap-2 mb-4" do |f| %>
+  <div class="flex-grow-1">
+    <%= f.text_field :query,
+                     placeholder: "Search products...",
+                     class: "form-control",
+                     value: params[:query] %>
+  </div>
+
+  <div>
+    <%= f.select :category_id,
+                 options_for_select([["All Categories", ""]] + Category.all.map { |c| [c.name, c.id] },
+                 params[:category_id]),
+                 {},
+                 class: "form-select" %>
+  </div>
+
+  <%= f.submit "Search", class: "btn btn-outline-success" %>
+<% end %>

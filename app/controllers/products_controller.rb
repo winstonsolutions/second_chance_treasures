@@ -1,17 +1,31 @@
 class ProductsController < ApplicationController
   # Index action - displays a list of all products
   def index
+    # Start with base query
     @products = Product.all
+    @categories = Category.all  # For the category dropdown
 
+    # Build search query
+    if params[:query].present?
+      search_condition = "products.title LIKE :query OR products.description LIKE :query"
+      @products = @products.where(search_condition, query: "%#{params[:query]}%")
+    end
+
+    # Filter by category if selected
+    if params[:category_id].present? && params[:category_id] != ""
+      @products = @products.joins(:categories).where(categories: { id: params[:category_id] })
+    end
+
+    # Apply existing filters
     case params[:filter]
     when 'on_sale'
       @products = @products.where(on_sale: true)
     when 'new'
-      @products = @products.where('created_at >= ?', 3.days.ago)
+      @products = @products.where('products.created_at >= ?', 3.days.ago)
     end
 
     # Add ordering and pagination
-    @products = @products.order(created_at: :desc).page(params[:page]).per(12)
+    @products = @products.order('products.created_at DESC').page(params[:page]).per(12)
   end
 
   # Show action - displays a specific product based on ID
