@@ -6,6 +6,15 @@
     <div class="border-bottom border-primary w-25 mb-3" style="border-width: 3px !important;"></div>
   </div>
 
+  <!-- Add filter buttons -->
+  <div class="mb-4">
+    <div class="btn-group" role="group" aria-label="Product filters">
+      <%= link_to "All Products", products_path, class: "btn #{!params[:filter] ? 'btn-primary' : 'btn-outline-primary'}" %>
+      <%= link_to "On Sale", products_path(filter: 'on_sale'), class: "btn #{params[:filter] == 'on_sale' ? 'btn-primary' : 'btn-outline-primary'}" %>
+      <%= link_to "New Arrivals", products_path(filter: 'new'), class: "btn #{params[:filter] == 'new' ? 'btn-primary' : 'btn-outline-primary'}" %>
+    </div>
+  </div>
+
   <!-- Add a short introduction paragraph -->
   <p class="lead mb-4">Browse our curated selection of quality second-hand items to add practicality and joy to your life, while contributing to environmental sustainability.</p>
 

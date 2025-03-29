@@ -1,7 +1,17 @@
 class ProductsController < ApplicationController
   # Index action - displays a list of all products
   def index
-    @products = Product.all.page(params[:page]).per(12)
+    @products = Product.all
+
+    case params[:filter]
+    when 'on_sale'
+      @products = @products.where(on_sale: true)
+    when 'new'
+      @products = @products.where('created_at >= ?', 3.days.ago)
+    end
+
+    # Add ordering and pagination
+    @products = @products.order(created_at: :desc).page(params[:page]).per(12)
   end
 
   # Show action - displays a specific product based on ID
