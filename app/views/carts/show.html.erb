@@ -1,12 +1,65 @@
-<div class="container mt-4">
-  <h1>Shopping Cart</h1>
-  
-  <% if @cart_items.empty? %>
-    <div class="alert alert-info">
-      Your cart is empty.
-    </div>
-    <%= link_to "Continue Shopping", root_path, class: "btn btn-primary" %>
+<div class="container">
+  <h1>Your Cart</h1>
+
+  <% if @cart_items.any? %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Subtotal</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @cart_items.each do |item| %>
+          <tr>
+            <td><%= item[:product].title %></td>
+            <td><%= number_to_currency(item[:product].price) %></td>
+            <td>
+              <%= form_tag update_cart_path(item[:product]), method: :patch, class: 'form-inline' do %>
+                <%= number_field_tag :quantity, item[:quantity], min: 1, class: 'form-control' %>
+                <%= submit_tag 'Update', class: 'btn btn-sm btn-secondary' %>
+              <% end %>
+            </td>
+            <td><%= number_to_currency(item[:subtotal]) %></td>
+            <td>
+              <%= button_to remove_from_cart_path(item[:product]),
+                  method: :delete,
+                  class: 'btn btn-sm btn-danger',
+                  form_class: 'd-inline',
+                  data: { turbo_confirm: 'Are you sure?' } do %>
+                <i class="bi bi-trash"></i> Remove
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3"><strong>Total:</strong></td>
+          <td><strong><%= number_to_currency(@total) %></strong></td>
+          <td>
+            <%= button_to clear_cart_path,
+                method: :delete,
+                class: 'btn btn-warning',
+                form_class: 'd-inline',
+                data: { turbo_confirm: 'Are you sure you want to clear your cart?' } do %>
+              Clear Cart
+            <% end %>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <%= link_to 'Continue Shopping', root_path, class: 'btn btn-secondary' %>
+    <%= button_to 'Checkout', orders_path,
+        method: :post,
+        class: 'btn btn-primary',
+        data: { turbo: false } %>
   <% else %>
-    <%# Display cart contents here %>
+    <p>Your cart is empty.</p>
+    <%= link_to 'Start Shopping', root_path, class: 'btn btn-primary' %>
   <% end %>
-</div> 
+</div>

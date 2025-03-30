@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   get "pages/show"
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  devise_for :users
+  devise_for :users, controllers: {
+    registrations: 'users/registrations'
+  }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -27,15 +29,23 @@ Rails.application.routes.draw do
   resources :products, only: [:index, :show, :new, :create]
   resources :categories, only: [:show]
 
-  # 添加购物车路由
-  get '/cart', to: 'carts#show', as: 'cart'
-
-  # 购物车路由 - 定义添加到购物车的路径
+  # 统一使用 carts 控制器
+  resource :cart, only: [:show]
   post 'cart/add/:id', to: 'carts#add', as: 'add_to_cart'
+  patch 'cart/update/:id', to: 'carts#update', as: 'update_cart'
+  delete 'cart/remove/:id', to: 'carts#remove', as: 'remove_from_cart'
+  delete 'cart/clear', to: 'carts#clear', as: 'clear_cart'
 
-  # 购物车路由
-  delete 'cart', to: 'carts#clear', as: 'clear_cart'  # 清空购物车
-  delete 'cart/:id', to: 'carts#remove', as: 'remove_from_cart'  # 从购物车中移除商品
+  resources :orders, only: [:index, :show, :new, :create] do
+    get 'success', on: :member
+    get 'cancel', on: :member
+  end
+
+  # Stripe webhook
+  post 'stripe/webhook', to: 'stripe#webhook'
+
+  # Add my account route
+  get '/my_account', to: 'users#show', as: 'my_account'
 
   root to: 'products#index'
 

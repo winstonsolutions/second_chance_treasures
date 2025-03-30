@@ -25,4 +25,8 @@ class Category < ApplicationRecord
     def self.ransackable_associations(auth_object = nil)
         ["product_categories", "products"]
     end
+
+    # 添加 kaminari 分页支持
+    paginates_per 10
+    max_paginates_per 100
 end

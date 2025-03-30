@@ -16,8 +16,13 @@ ActiveAdmin.register Category do
   # end
   permit_params :name
 
+  # 移除 controller 块，改用 collection_action
+  collection_action :index, method: :get do
+    @categories = Category.page(params[:page]).per(10)
+  end
+
   # 自定义列表显示
-  index do
+  index pagination_total: false do
     selectable_column
     id_column
     column :name

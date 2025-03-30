@@ -1,0 +1,63 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <%= link_to "SecondChance Treasures", root_path, class: "navbar-brand" %>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <%= link_to "Home", root_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item dropdown">
+          <%= link_to "Browse Categories", "#",
+              class: "nav-link dropdown-toggle",
+              id: "navbarDropdown",
+              role: "button",
+              data: { bs_toggle: "dropdown" },
+              aria: { expanded: "false" } %>
+          <ul class="dropdown-menu">
+            <% Category.all.each do |category| %>
+              <li>
+                <%= link_to category.name, category_path(category), class: "dropdown-item" %>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <%= link_to "About", about_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "Contact", contact_path, class: "nav-link" %>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <%= link_to cart_path, class: "nav-link" do %>
+            <i class="fas fa-shopping-cart"></i> Shopping Cart
+            <% if @cart_service&.items&.any? %>
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                <%= @cart_service.items.count %>
+              </span>
+            <% end %>
+          <% end %>
+        </li>
+        <% if user_signed_in? %>
+          <li class="nav-item">
+            <%= link_to "My Account", my_account_path, class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "btn btn-outline-danger" %>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>
