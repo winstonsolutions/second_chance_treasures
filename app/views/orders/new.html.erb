@@ -1,0 +1,117 @@
+<div class="container my-4">
+  <h2>Order Confirmation</h2>
+
+  <%= form_with(model: @order, local: true) do |f| %>
+    <% if @order.errors.any? %>
+      <div class="alert alert-danger">
+        <h4><%= pluralize(@order.errors.count, "error") %> prohibited this order from being saved:</h4>
+        <ul>
+          <% @order.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Shipping Address</h5>
+      </div>
+      <div class="card-body">
+        <% if current_user.address_line1.present? && current_user.province_id.present? %>
+          <%# Display existing address if user has one %>
+          <p><strong>Address:</strong> <%= current_user.address_line1 %></p>
+          <% if current_user.address_line2.present? %>
+            <p><strong>Address 2:</strong> <%= current_user.address_line2 %></p>
+          <% end %>
+          <p><strong>City:</strong> <%= current_user.city %></p>
+          <p><strong>Province:</strong> <%= current_user.province.name %></p>
+          <p><strong>Postal Code:</strong> <%= current_user.postal_code %></p>
+
+          <%# Hidden fields to submit the address %>
+          <%= f.hidden_field :address_line1, value: current_user.address_line1 %>
+          <%= f.hidden_field :address_line2, value: current_user.address_line2 %>
+          <%= f.hidden_field :city, value: current_user.city %>
+          <%= f.hidden_field :postal_code, value: current_user.postal_code %>
+          <%= f.hidden_field :province_id, value: current_user.province_id %>
+
+          <%= link_to "Update Address", edit_user_registration_path, class: "btn btn-outline-primary" %>
+        <% else %>
+          <%# Show address form if user doesn't have an address %>
+          <div class="form-group mb-3">
+            <%= f.label :address_line1, "Address Line 1" %>
+            <%= f.text_field :address_line1, class: "form-control", required: true %>
+          </div>
+
+          <div class="form-group mb-3">
+            <%= f.label :address_line2, "Address Line 2 (Optional)" %>
+            <%= f.text_field :address_line2, class: "form-control" %>
+          </div>
+
+          <div class="form-group mb-3">
+            <%= f.label :city %>
+            <%= f.text_field :city, class: "form-control", required: true %>
+          </div>
+
+          <div class="form-group mb-3">
+            <%= f.label :province_id, "Province" %>
+            <%= f.collection_select :province_id, Province.order(:name), :id, :name,
+                { prompt: "Select a province" },
+                { class: "form-control", required: true } %>
+          </div>
+
+          <div class="form-group mb-3">
+            <%= f.label :postal_code %>
+            <%= f.text_field :postal_code, class: "form-control", required: true %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Order Details</h5>
+      </div>
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @order.order_items.each do |item| %>
+              <tr>
+                <td><%= item.product.title %></td>
+                <td><%= item.quantity %></td>
+                <td><%= number_to_currency(item.price_at_time) %></td>
+                <td><%= number_to_currency(item.price_at_time * item.quantity) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
+              <td><%= number_to_currency(@order.subtotal) %></td>
+            </tr>
+            <tr>
+              <td colspan="3" class="text-end"><strong>Tax:</strong></td>
+              <td><%= number_to_currency(@order.tax_amount) %></td>
+            </tr>
+            <tr>
+              <td colspan="3" class="text-end"><strong>Total:</strong></td>
+              <td><%= number_to_currency(@order.total) %></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="text-end">
+      <%= f.submit "Place Order", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

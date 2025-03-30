@@ -1,0 +1,92 @@
+<div class="container my-4">
+  <h2>My Orders</h2>
+
+  <% if @orders.any? %>
+    <div class="row">
+      <% @orders.each do |order| %>
+        <div class="col-12 mb-4">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Order #<%= order.id %></h5>
+              <span class="badge <%= order.status == 'new' ? 'bg-primary' : (order.status == 'paid' ? 'bg-success' : 'bg-info') %>">
+                <%= order.status.titleize %>
+              </span>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <h6>Order Details</h6>
+                  <p class="mb-1"><strong>Date:</strong> <%= order.created_at.strftime("%B %d, %Y") %></p>
+                  <p class="mb-1"><strong>Items:</strong> <%= order.order_items.sum(:quantity) %></p>
+                  <p class="mb-1"><strong>Subtotal:</strong> <%= number_to_currency(order.subtotal) %></p>
+                  <p class="mb-1"><strong>Tax:</strong> <%= number_to_currency(order.tax_amount) %></p>
+                  <p class="mb-1"><strong>Total:</strong> <%= number_to_currency(order.total) %></p>
+                </div>
+                <div class="col-md-6">
+                  <h6>Shipping Address</h6>
+                  <p class="mb-1"><%= order.address_line1 %></p>
+                  <% if order.address_line2.present? %>
+                    <p class="mb-1"><%= order.address_line2 %></p>
+                  <% end %>
+                  <p class="mb-1"><%= order.city %>, <%= order.province.code %></p>
+                  <p class="mb-1"><%= order.postal_code %></p>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <h6>Tax Information</h6>
+                <div class="table-responsive">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th>Tax Type</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if order.province.gst > 0 %>
+                        <tr>
+                          <td>GST</td>
+                          <td><%= number_to_percentage(order.province.gst, precision: 2) %></td>
+                          <td><%= number_to_currency(order.subtotal * order.province.gst / 100) %></td>
+                        </tr>
+                      <% end %>
+                      <% if order.province.pst > 0 %>
+                        <tr>
+                          <td>PST</td>
+                          <td><%= number_to_percentage(order.province.pst, precision: 2) %></td>
+                          <td><%= number_to_currency(order.subtotal * order.province.pst / 100) %></td>
+                        </tr>
+                      <% end %>
+                      <% if order.province.hst > 0 %>
+                        <tr>
+                          <td>HST</td>
+                          <td><%= number_to_percentage(order.province.hst, precision: 2) %></td>
+                          <td><%= number_to_currency(order.subtotal * order.province.hst / 100) %></td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="text-end mt-3">
+                <%= link_to "View Details", order_path(order), class: "btn btn-primary" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-5">
+      <div class="mb-4">
+        <i class="bi bi-box-seam" style="font-size: 4rem;"></i>
+      </div>
+      <h3>No Orders Yet</h3>
+      <p class="text-muted">You haven't placed any orders yet.</p>
+      <%= link_to "Start Shopping", products_path, class: "btn btn-primary mt-3" %>
+    </div>
+  <% end %>
+</div>

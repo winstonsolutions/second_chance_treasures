@@ -6,7 +6,8 @@ class Order < ApplicationRecord
 
   validates :status, inclusion: { in: %w[new paid shipped] }
   validates :subtotal, :tax_amount, :total, presence: true, numericality: { greater_than_or_equal_to: 0 }
-  validates :user, presence: true
+  validates :user, :province, presence: true
+  validates :address_line1, :city, :postal_code, presence: true
 
   # Add ransackable_attributes method to whitelist searchable attributes
   def self.ransackable_attributes(auth_object = nil)
@@ -34,16 +35,12 @@ class Order < ApplicationRecord
     self.total = subtotal + tax_amount
   end
 
-  def total
-    order_items.sum { |item| item.quantity * item.price }
-  end
-
   private
 
   def calculate_tax
     return 0 unless province
-    subtotal * (
-      (province.gst + province.pst + province.hst) / 100
-    )
+
+    tax_rate = (province.gst + province.pst + province.hst) / 100.0
+    (subtotal * tax_rate).round(2)
   end
 end

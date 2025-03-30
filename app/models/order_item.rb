@@ -3,7 +3,7 @@ class OrderItem < ApplicationRecord
   belongs_to :product
 
   validates :quantity, presence: true, numericality: { greater_than: 0 }
-  validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :price_at_time, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
   before_validation :set_price_at_time, on: :create
 

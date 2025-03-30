@@ -1,0 +1,118 @@
+<div class="container my-4">
+  <h2>Order #<%= @order.id %></h2>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5>Order Status</h5>
+    </div>
+    <div class="card-body">
+      <p><strong>Status:</strong> <%= @order.status.titleize %></p>
+      <p><strong>Order Date:</strong> <%= @order.created_at.strftime("%B %d, %Y") %></p>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5>Shipping Address</h5>
+    </div>
+    <div class="card-body">
+      <p><strong>Address:</strong> <%= @order.address_line1 %></p>
+      <% if @order.address_line2.present? %>
+        <p><strong>Address 2:</strong> <%= @order.address_line2 %></p>
+      <% end %>
+      <p><strong>City:</strong> <%= @order.city %></p>
+      <p><strong>Province:</strong> <%= @order.province.name %></p>
+      <p><strong>Postal Code:</strong> <%= @order.postal_code %></p>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5>Tax Information</h5>
+    </div>
+    <div class="card-body">
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th>Tax Type</th>
+            <th>Rate</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @order.province.gst > 0 %>
+            <tr>
+              <td>GST</td>
+              <td><%= number_to_percentage(@order.province.gst, precision: 2) %></td>
+              <td><%= number_to_currency(@order.subtotal * @order.province.gst / 100) %></td>
+            </tr>
+          <% end %>
+          <% if @order.province.pst > 0 %>
+            <tr>
+              <td>PST</td>
+              <td><%= number_to_percentage(@order.province.pst, precision: 2) %></td>
+              <td><%= number_to_currency(@order.subtotal * @order.province.pst / 100) %></td>
+            </tr>
+          <% end %>
+          <% if @order.province.hst > 0 %>
+            <tr>
+              <td>HST</td>
+              <td><%= number_to_percentage(@order.province.hst, precision: 2) %></td>
+              <td><%= number_to_currency(@order.subtotal * @order.province.hst / 100) %></td>
+            </tr>
+          <% end %>
+          <tr class="table-secondary">
+            <td colspan="2"><strong>Total Tax:</strong></td>
+            <td><strong><%= number_to_currency(@order.tax_amount) %></strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5>Order Details</h5>
+    </div>
+    <div class="card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @order.order_items.each do |item| %>
+            <tr>
+              <td><%= item.product.title %></td>
+              <td><%= item.quantity %></td>
+              <td><%= number_to_currency(item.price_at_time) %></td>
+              <td><%= number_to_currency(item.price_at_time * item.quantity) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
+            <td><%= number_to_currency(@order.subtotal) %></td>
+          </tr>
+          <tr>
+            <td colspan="3" class="text-end"><strong>Tax:</strong></td>
+            <td><%= number_to_currency(@order.tax_amount) %></td>
+          </tr>
+          <tr>
+            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+            <td><%= number_to_currency(@order.total) %></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <div class="text-end">
+    <%= link_to "Back to Orders", orders_path, class: "btn btn-secondary" %>
+  </div>
+</div>
