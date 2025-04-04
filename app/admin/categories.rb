@@ -1,56 +1,69 @@
 ActiveAdmin.register Category do
+  # Permit parameters that can be edited through the admin interface
+  permit_params :name, :description
 
-  # See permitted parameters documentation:
-  # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-  #
-  # Uncomment all parameters which should be permitted for assignment
-  #
-  # permit_params :name, :description
-  #
-  # or
-  #
-  # permit_params do
-  #   permitted = [:name, :description]
-  #   permitted << :other if params[:action] == 'create' && current_user.admin?
-  #   permitted
-  # end
-  permit_params :name
+  # 禁用过滤器以避免影响我们的集合
+  config.filters = false
 
-  # 移除 controller 块，改用 collection_action
-  collection_action :index, method: :get do
-    @categories = Category.page(params[:page]).per(10)
+  # 完全覆盖index方法
+  controller do
+    def index
+      # 这个方法会被覆盖
+      index! do |format|
+        # 在这里替换collection变量
+        @collection = Category.page(params[:page]).per(1000)
+        format.html
+      end
+    end
   end
 
-  # 自定义列表显示
-  index pagination_total: false do
+  # 配置 index 视图
+  index do
     selectable_column
     id_column
     column :name
+    column :description do |category|
+      truncate(category.description, length: 100) if category.description.present?
+    end
+    column :products do |category|
+      link_to "#{category.products.count} products", admin_products_path(q: { categories_id_eq: category.id })
+    end
     column :created_at
     column :updated_at
     actions
   end
 
-  # 只添加我们需要的过滤器
-  filter :name
-  filter :created_at
-  filter :updated_at
-
-  # 表单配置
+  # Form for creating/editing categories
   form do |f|
     f.inputs "Category Details" do
       f.input :name
+      f.input :description, as: :text
     end
     f.actions
   end
 
-  # 详情页配置
+  # Show page
   show do
     attributes_table do
       row :id
       row :name
+      row :description
       row :created_at
       row :updated_at
+    end
+
+    panel "Products" do
+      table_for category.products do
+        column :id
+        column :title do |product|
+          link_to product.title, admin_product_path(product)
+        end
+        column :price do |product|
+          number_to_currency(product.price)
+        end
+        column :condition
+        column :quantity
+      end
     end
   end
 end
