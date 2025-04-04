@@ -20,7 +20,11 @@ class Order < ApplicationRecord
       "subtotal",
       "tax_amount",
       "total",
-      "updated_at"
+      "updated_at",
+      "address_line1",
+      "address_line2",
+      "postal_code",
+      "province_id"
     ]
   end
 
