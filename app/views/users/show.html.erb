@@ -5,6 +5,17 @@
     <div class="card-body">
       <h5 class="card-title">Account Information</h5>
       <p><strong>Email:</strong> <%= @user.email %></p>
+      <p><strong>Name:</strong> <%= "#{@user.first_name} #{@user.last_name}" %></p>
+      <p><strong>Phone:</strong> <%= @user.phone %></p>
+
+      <% if @user.address_line1.present? && @user.city.present? && @user.postal_code.present? && @user.province.present? %>
+        <h6 class="mt-3">Address Information</h6>
+        <p><%= @user.address_line1 %></p>
+        <% if @user.address_line2.present? %>
+          <p><%= @user.address_line2 %></p>
+        <% end %>
+        <p><%= "#{@user.city}, #{@user.province.name} #{@user.postal_code}" %></p>
+      <% end %>
 
       <div class="mt-3">
         <%= link_to "Edit Account", edit_user_registration_path, class: "btn btn-primary" %>

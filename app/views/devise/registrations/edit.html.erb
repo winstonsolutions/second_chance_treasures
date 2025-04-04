@@ -1,0 +1,103 @@
+<div class="container">
+  <h2>Edit Account</h2>
+
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <%= f.label :email %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <%= f.label :password %> <i>(leave blank if you don't want to change it)</i>
+        <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
+        <% if @minimum_password_length %>
+          <small class="form-text text-muted">(<%= @minimum_password_length %> characters minimum)</small>
+        <% end %>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <%= f.label :current_password %> <i>(required only if changing password)</i>
+        <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control" %>
+        <small class="form-text text-muted">You can update your address and profile info without entering your current password.</small>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <%= f.label :first_name %>
+        <%= f.text_field :first_name, class: "form-control" %>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <%= f.label :last_name %>
+        <%= f.text_field :last_name, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <%= f.label :phone %>
+        <%= f.telephone_field :phone, class: "form-control" %>
+      </div>
+    </div>
+
+    <h4 class="mt-4">Address Information</h4>
+
+    <div class="row">
+      <div class="col-12 mb-3">
+        <%= f.label :address_line1, "Address Line 1" %>
+        <%= f.text_field :address_line1, class: "form-control" %>
+      </div>
+
+      <div class="col-12 mb-3">
+        <%= f.label :address_line2, "Address Line 2 (Optional)" %>
+        <%= f.text_field :address_line2, class: "form-control" %>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <%= f.label :city %>
+        <%= f.text_field :city, class: "form-control" %>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <%= f.label :province_id, "Province" %>
+        <%= f.collection_select :province_id, Province.order(:name), :id, :name,
+            { prompt: "Select a province" },
+            { class: "form-control" } %>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <%= f.label :postal_code %>
+        <%= f.text_field :postal_code, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="actions mt-4">
+      <%= f.submit "Update", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
+  <div class="mt-5">
+    <h3>Cancel my account</h3>
+    <div class="d-flex align-items-center">
+      <p class="mb-0 me-3">Unhappy?</p>
+      <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure? This cannot be undone.", turbo_confirm: "Are you sure? This cannot be undone." }, method: :delete, class: "btn btn-danger" %>
+    </div>
+  </div>
+
+  <div class="mt-3">
+    <%= link_to "Back", :back, class: "btn btn-secondary" %>
+  </div>
+</div>
