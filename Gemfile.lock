@@ -106,7 +106,7 @@ GEM
     bootstrap-icons-helper (2.0.2)
       bootstrap-icons (~> 1)
       rails (>= 7.0)
-    brakeman (7.0.0)
+    brakeman (7.0.1)
       racc
     builder (3.3.0)
     capybara (3.40.0)
