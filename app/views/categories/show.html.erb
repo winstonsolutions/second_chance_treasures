@@ -7,6 +7,17 @@
     </ol>
   </nav>
 
+  <!-- Add search form -->
+  <%= form_with url: category_path(@category), method: :get, class: "d-flex flex-wrap gap-2 mb-4" do |f| %>
+    <div class="flex-grow-1">
+      <%= f.text_field :query,
+                     placeholder: "Search products in #{@category.name}...",
+                     class: "form-control",
+                     value: params[:query] %>
+    </div>
+    <%= f.submit "Search", class: "btn btn-outline-success" %>
+  <% end %>
+
   <h1><%= @category.name %></h1>
   <p class="lead"><%= @category.description %></p>
 

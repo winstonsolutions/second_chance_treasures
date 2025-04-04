@@ -7,7 +7,7 @@ class ProductsController < ApplicationController
 
     # Build search query
     if params[:query].present?
-      search_condition = "products.title LIKE :query OR products.description LIKE :query"
+      search_condition = "products.title LIKE :query"
       @products = @products.where(search_condition, query: "%#{params[:query]}%")
     end
 
