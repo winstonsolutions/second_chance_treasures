@@ -3,6 +3,9 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><%= link_to "Home", root_path %></li>
+      <% if @primary_category.present? %>
+        <li class="breadcrumb-item"><%= link_to @primary_category.name, products_path(category_id: @primary_category.id) %></li>
+      <% end %>
       <li class="breadcrumb-item active" aria-current="page"><%= @product.title %></li>
     </ol>
   </nav>

@@ -31,6 +31,8 @@ class ProductsController < ApplicationController
   # Show action - displays a specific product based on ID
   def show
     @product = Product.find(params[:id])
+    # Get primary category for breadcrumb navigation
+    @primary_category = @product.categories.first if @product.categories.any?
   end
 
   # New action - displays form for creating a new product
