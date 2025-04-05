@@ -88,5 +88,9 @@ Rails.application.configure do
 
   # 在现有配置的基础上添加
   config.log_level = :debug
+
+  # 设置默认URL选项，用于生成URL
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  Rails.application.routes.default_url_options = { host: 'localhost', port: 3000 }
 end
 

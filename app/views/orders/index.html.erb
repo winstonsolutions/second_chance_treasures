@@ -21,6 +21,11 @@
                   <p class="mb-1"><strong>Subtotal:</strong> <%= number_to_currency(order.subtotal) %></p>
                   <p class="mb-1"><strong>Tax:</strong> <%= number_to_currency(order.tax_amount) %></p>
                   <p class="mb-1"><strong>Total:</strong> <%= number_to_currency(order.total) %></p>
+                  <% if order.stripe_payment_id.present? %>
+                    <p class="mb-1"><strong>Payment ID:</strong> <%= order.stripe_payment_id %></p>
+                  <% elsif order.status == 'new' %>
+                    <p class="mb-1 text-warning"><strong>Payment Status:</strong> Pending payment</p>
+                  <% end %>
                 </div>
                 <div class="col-md-6">
                   <h6>Shipping Address</h6>
@@ -73,6 +78,9 @@
 
               <div class="text-end mt-3">
                 <%= link_to "View Details", order_path(order), class: "btn btn-primary" %>
+                <% if order.status == 'new' %>
+                  <%= link_to "Pay Now", order_path(order), class: "btn btn-success ms-2" %>
+                <% end %>
               </div>
             </div>
           </div>
