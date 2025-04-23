@@ -36,6 +36,11 @@ Rails.application.routes.draw do
   delete 'cart/remove/:id', to: 'carts#remove', as: 'remove_from_cart'
   delete 'cart/clear', to: 'carts#clear', as: 'clear_cart'
 
+  # Guest checkout routes
+  get 'guest_checkout', to: 'orders#guest_new', as: 'guest_checkout'
+  post 'guest_checkout', to: 'orders#guest_create', as: 'create_guest_order'
+  get 'guest_confirmation', to: 'orders#guest_confirmation', as: 'guest_order_confirmation'
+
   resources :orders, only: [:index, :show, :new, :create] do
     get 'success', on: :member
     get 'cancel', on: :member

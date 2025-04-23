@@ -1,0 +1,87 @@
+<div class="container my-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h4>Order #<%= @order.id %> Confirmation</h4>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-success">
+            <p class="mb-0">Thank you for your order! We've sent a confirmation to <strong><%= @order.email %></strong>.</p>
+          </div>
+
+          <div class="mb-4">
+            <h5 class="mb-3">Order Status</h5>
+            <p><strong>Status:</strong> <%= @order.status.titleize %></p>
+            <p><strong>Order Date:</strong> <%= @order.created_at.strftime("%B %d, %Y") %></p>
+          </div>
+
+          <div class="mb-4">
+            <h5 class="mb-3">Payment</h5>
+            <p>Please complete your payment to process your order.</p>
+            <%= link_to "Complete Payment", success_order_path(@order, session_id: @session_id), class: "btn btn-primary" %>
+          </div>
+
+          <div class="mb-4">
+            <h5 class="mb-3">Shipping Address</h5>
+            <p><strong>Address:</strong> <%= @order.address_line1 %></p>
+            <% if @order.address_line2.present? %>
+              <p><strong>Address 2:</strong> <%= @order.address_line2 %></p>
+            <% end %>
+            <p><strong>City:</strong> <%= @order.city %></p>
+            <p><strong>Province:</strong> <%= @order.province.name %></p>
+            <p><strong>Postal Code:</strong> <%= @order.postal_code %></p>
+          </div>
+
+          <div class="mb-4">
+            <h5 class="mb-3">Order Summary</h5>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @order.order_items.each do |item| %>
+                  <tr>
+                    <td><%= item.product.title %></td>
+                    <td><%= item.quantity %></td>
+                    <td><%= number_to_currency(item.price_at_time) %></td>
+                    <td><%= number_to_currency(item.price_at_time * item.quantity) %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
+                  <td><%= number_to_currency(@order.subtotal) %></td>
+                </tr>
+                <tr>
+                  <td colspan="3" class="text-end"><strong>Tax:</strong></td>
+                  <td><%= number_to_currency(@order.tax_amount) %></td>
+                </tr>
+                <tr>
+                  <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                  <td><strong><%= number_to_currency(@order.total) %></strong></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <div class="d-flex justify-content-between mt-4">
+            <%= link_to "Continue Shopping", products_path, class: "btn btn-outline-primary" %>
+            <div>
+              <p class="mb-1">Want to track your orders easily?</p>
+              <div class="d-flex gap-2">
+                <%= link_to "Create an Account", new_user_registration_path, class: "btn btn-outline-secondary" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

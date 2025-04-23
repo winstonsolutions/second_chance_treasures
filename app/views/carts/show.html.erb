@@ -54,10 +54,23 @@
     </table>
 
     <%= link_to 'Continue Shopping', root_path, class: 'btn btn-secondary' %>
-    <%= button_to 'Checkout', orders_path,
-        method: :post,
-        class: 'btn btn-primary',
-        data: { turbo: false } %>
+    <% if user_signed_in? %>
+      <%= button_to 'Checkout', orders_path,
+          method: :post,
+          class: 'btn btn-primary',
+          data: { turbo: false } %>
+    <% else %>
+      <div class="card mt-3 mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Checkout Options</h5>
+          <div class="d-flex flex-column flex-md-row gap-2">
+            <%= link_to "Login to Checkout", new_user_session_path, class: "btn btn-outline-primary" %>
+            <%= link_to "Create Account & Checkout", new_user_registration_path, class: "btn btn-outline-primary" %>
+            <%= link_to "Checkout as Guest", guest_checkout_path, class: "btn btn-primary" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
   <% else %>
     <p>Your cart is empty.</p>
     <%= link_to 'Start Shopping', root_path, class: 'btn btn-primary' %>

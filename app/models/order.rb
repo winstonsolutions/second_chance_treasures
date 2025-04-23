@@ -1,13 +1,16 @@
 class Order < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, optional: true
   belongs_to :province
   has_many :order_items, dependent: :destroy
   has_many :products, through: :order_items
 
   validates :status, inclusion: { in: %w[new paid shipped] }
   validates :subtotal, :tax_amount, :total, presence: true, numericality: { greater_than_or_equal_to: 0 }
-  validates :user, :province, presence: true
+  validates :province, presence: true
   validates :address_line1, :city, :postal_code, presence: true
+
+  # Validate email presence for guest orders (when user is nil)
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }, if: -> { user.nil? }
 
   # Add ransackable_attributes method to whitelist searchable attributes
   def self.ransackable_attributes(auth_object = nil)
@@ -24,7 +27,8 @@ class Order < ApplicationRecord
       "address_line1",
       "address_line2",
       "postal_code",
-      "province_id"
+      "province_id",
+      "email"
     ]
   end
 

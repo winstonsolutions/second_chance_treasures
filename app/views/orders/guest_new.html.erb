@@ -1,0 +1,134 @@
+<div class="container my-4">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h4>Guest Checkout</h4>
+        </div>
+        <div class="card-body">
+          <%= form_for @order, url: create_guest_order_path, html: { class: 'needs-validation' } do |f| %>
+            <% if @order.errors.any? %>
+              <div class="alert alert-danger">
+                <h5>Please fix the following errors:</h5>
+                <ul>
+                  <% @order.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <div class="mb-3">
+              <h5>Contact Information</h5>
+              <div class="form-group mb-3">
+                <%= f.label :email, "Email Address", class: "form-label required" %>
+                <%= f.email_field :email, class: "form-control", required: true %>
+                <small class="text-muted">We'll send your order confirmation and updates to this email</small>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <h5>Shipping Address</h5>
+              <div class="form-group mb-3">
+                <%= f.label :address_line1, "Address Line 1", class: "form-label required" %>
+                <%= f.text_field :address_line1, class: "form-control", required: true %>
+              </div>
+
+              <div class="form-group mb-3">
+                <%= f.label :address_line2, "Address Line 2 (Optional)", class: "form-label" %>
+                <%= f.text_field :address_line2, class: "form-control" %>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group mb-3">
+                    <%= f.label :city, class: "form-label required" %>
+                    <%= f.text_field :city, class: "form-control", required: true %>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mb-3">
+                    <%= f.label :province_id, "Province", class: "form-label required" %>
+                    <%= f.collection_select :province_id, Province.all, :id, :name, { prompt: "Select a province" }, { class: "form-select", required: true } %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group mb-3">
+                <%= f.label :postal_code, class: "form-label required" %>
+                <%= f.text_field :postal_code, class: "form-control", required: true %>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+              <%= link_to "Back to Cart", cart_path, class: "btn btn-outline-secondary" %>
+              <%= f.submit "Continue to Payment", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+
+          <div class="mt-4 pt-3 border-top">
+            <p>Already have an account?</p>
+            <div class="d-flex gap-2">
+              <%= link_to "Login", new_user_session_path, class: "btn btn-outline-primary" %>
+              <%= link_to "Create Account", new_user_registration_path, class: "btn btn-outline-primary" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h5>Order Summary</h5>
+        </div>
+        <div class="card-body">
+          <% if @cart_items.any? %>
+            <div class="cart-summary">
+              <% @cart_items.each do |item| %>
+                <div class="d-flex justify-content-between mb-2">
+                  <div>
+                    <span class="badge bg-secondary me-1"><%= item[:quantity] %></span>
+                    <%= item[:product].title %>
+                  </div>
+                  <div><%= number_to_currency(item[:subtotal]) %></div>
+                </div>
+              <% end %>
+
+              <hr>
+
+              <div class="d-flex justify-content-between mb-2">
+                <div><strong>Subtotal:</strong></div>
+                <div><%= number_to_currency(@subtotal) %></div>
+              </div>
+
+              <div class="d-flex justify-content-between mb-2">
+                <div><strong>Tax:</strong></div>
+                <div>Calculated at next step</div>
+              </div>
+
+              <hr>
+
+              <div class="d-flex justify-content-between">
+                <div><strong>Total:</strong></div>
+                <div><strong>To be calculated</strong></div>
+              </div>
+            </div>
+          <% else %>
+            <p>Your cart is empty.</p>
+            <%= link_to "Shop Products", products_path, class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for :head do %>
+  <style>
+    .required:after {
+      content: " *";
+      color: red;
+    }
+  </style>
+<% end %>
