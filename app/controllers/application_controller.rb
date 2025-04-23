@@ -5,6 +5,9 @@ class ApplicationController < ActionController::Base
   before_action :initialize_cart_service
   before_action :load_categories
 
+  # Add custom flash types
+  add_flash_types :info
+
   private
 
   def initialize_cart_service

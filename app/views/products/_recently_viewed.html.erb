@@ -1,0 +1,31 @@
+<% if session[:recently_viewed_products].present? && session[:recently_viewed_products].length > 1 %>
+  <div class="recently-viewed mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3>Recently Viewed Products</h3>
+      <%= button_to "Clear History", clear_recently_viewed_products_path, method: :delete,
+                    class: "btn btn-sm btn-outline-secondary",
+                    form: { data: { turbo_confirm: "Clear your recently viewed products history?" } } %>
+    </div>
+    <div class="row">
+      <% Product.where(id: session[:recently_viewed_products].reject { |id| id == @product.id }.take(4)).each do |product| %>
+        <div class="col-md-3 mb-4">
+          <div class="card h-100">
+            <% if product.image.attached? %>
+              <%= link_to product_path(product) do %>
+                <%= image_tag product.image, class: "card-img-top", alt: product.title %>
+              <% end %>
+            <% else %>
+              <%= link_to product_path(product) do %>
+                <div class="no-image-placeholder">No Image</div>
+              <% end %>
+            <% end %>
+            <div class="card-body">
+              <h5 class="card-title"><%= link_to product.title, product_path(product), class: "text-decoration-none" %></h5>
+              <p class="card-text text-success fw-bold"><%= number_to_currency(product.price) %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

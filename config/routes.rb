@@ -26,7 +26,11 @@ Rails.application.routes.draw do
   get 'browser-not-supported', to: 'pages#browser_not_supported', as: 'browser_not_supported'
 
   # Add resources for products
-  resources :products, only: [:index, :show, :new, :create]
+  resources :products, only: [:index, :show, :new, :create] do
+    collection do
+      delete 'clear_recently_viewed'
+    end
+  end
   resources :categories, only: [:show]
 
   # 统一使用 carts 控制器

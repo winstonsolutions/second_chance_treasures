@@ -33,6 +33,14 @@ class ProductsController < ApplicationController
     @product = Product.find(params[:id])
     # Get primary category for breadcrumb navigation
     @primary_category = @product.categories.first if @product.categories.any?
+
+    # Track recently viewed products in session
+    track_recently_viewed_product(@product)
+
+    # Show info message about recently viewed products if there are at least 2
+    if session[:recently_viewed_products].length > 1
+      flash[:info] = "You've viewed #{session[:recently_viewed_products].length} products recently"
+    end
   end
 
   # New action - displays form for creating a new product
@@ -81,6 +89,12 @@ class ProductsController < ApplicationController
     redirect_to products_path, notice: 'Product was successfully destroyed.'
   end
 
+  # Clear recently viewed products
+  def clear_recently_viewed
+    session[:recently_viewed_products] = []
+    redirect_back fallback_location: products_path, info: 'Your recently viewed products have been cleared'
+  end
+
   private
     # Strong parameters - defines which parameters are allowed
     # This helps prevent mass assignment vulnerabilities
@@ -97,5 +111,20 @@ class ProductsController < ApplicationController
         images: [],
         category_ids: []
       )
+    end
+
+    # Method to track recently viewed products in session
+    def track_recently_viewed_product(product)
+      # Initialize the recently viewed products array if it doesn't exist
+      session[:recently_viewed_products] ||= []
+
+      # Remove the product from the array if it's already there
+      session[:recently_viewed_products].delete(product.id)
+
+      # Add the product to the beginning of the array
+      session[:recently_viewed_products].unshift(product.id)
+
+      # Limit the array to 5 products
+      session[:recently_viewed_products] = session[:recently_viewed_products].take(5)
     end
 end
