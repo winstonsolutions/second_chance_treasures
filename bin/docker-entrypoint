@@ -7,13 +7,8 @@ fi
 
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  # Make sure we can run without RAILS_MASTER_KEY
-  if [ -z "${SECRET_KEY_BASE}" ]; then
-    export SECRET_KEY_BASE=dummyvalue123456789012345678901234567890
-  fi
-  if [ -z "${RAILS_MASTER_KEY}" ]; then
-    export RAILS_MASTER_KEY=dummykey
-  fi
+  # Make sure we're in development mode
+  export RAILS_ENV=development
   ./bin/rails db:prepare
 fi
 
