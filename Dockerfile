@@ -42,9 +42,12 @@ RUN bundle install && \
 # Copy application code
 COPY . .
 
-# Copy master.key to the appropriate location
-COPY config/master.key config/master.key
-RUN chmod 600 config/master.key
+# Create a dummy credentials file and master key for development
+RUN mkdir -p config && \
+    if [ ! -f config/master.key ]; then \
+      echo "a1dfec0f27f615380acdabf6aad960e1" > config/master.key; \
+      chmod 600 config/master.key; \
+    fi
 
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
@@ -70,9 +73,6 @@ RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
     chown -R rails:rails db log storage tmp config/master.key
 USER 1000:1000
-
-# Make sure master.key has the right permissions
-RUN chmod 600 config/master.key
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
