@@ -2,7 +2,76 @@
 @import "bootstrap";
 @import "bootstrap-icons";
 
-// 添加这个 CSS 来修复图标显示
+// SCSS Variables
+$border-color: #dee2e6;
+$background-light: #f8f9fa;
+$primary-color: #0d6efd;
+$primary-hover: #0056b3;
+$shadow-color: rgba(0, 0, 0, 0.1);
+$transition-speed: 0.3s;
+$spacing-unit: 1rem;
+$border-width-thick: 3px;
+$icon-large-size: 4rem;
+$cart-input-width: 120px;
+$quantity-input-width: 70px;
+$cart-item-thumbnail-size: 50px;
+
+// Breakpoints for responsive design
+$mobile-width: 576px;
+$tablet-width: 768px;
+$desktop-width: 992px;
+$large-desktop-width: 1200px;
+
+// Responsive mixins
+@mixin mobile {
+  @media (max-width: #{$mobile-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$mobile-width}) and (max-width: #{$desktop-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$desktop-width}) {
+    @content;
+  }
+}
+
+// Mixins for reusable style patterns
+@mixin transition($property) {
+  transition: $property $transition-speed ease;
+}
+
+@mixin box-shadow($intensity: 1) {
+  box-shadow: 0 ($spacing-unit * $intensity / 2) ($spacing-unit * $intensity) $shadow-color;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin icon-size($size) {
+  font-size: $size;
+}
+
+@mixin square-thumbnail($size) {
+  width: $size;
+  height: $size;
+  object-fit: cover;
+}
+
+// Global responsive styles
+html, body {
+  overflow-x: hidden;
+}
+
+// Icon display fix
 .bi::before {
   display: inline-block;
   content: "";
@@ -12,72 +81,322 @@
   background-size: 1rem 1rem;
 }
 
-// Your custom styles
-/* Product card hover effect */
+// Product card styles
 .hover-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  @include transition(transform);
+  transition: box-shadow $transition-speed ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    @include box-shadow(2);
+  }
+
+  @include mobile {
+    &:hover {
+      transform: none;
+    }
+  }
 }
 
-.hover-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
-}
-
-/* Product image styles */
+// Product image styles
 .product-img {
   height: 180px;
   object-fit: cover;
+
+  @include mobile {
+    height: 150px;
+  }
 }
 
-/* Page title styles */
+// Product detail page image styles
+.main-image {
+  border: 1px solid $border-color;
+  padding: $spacing-unit;
+  background: white;
+
+  @include mobile {
+    padding: $spacing-unit / 2;
+  }
+}
+
+.thumbnail-images {
+  gap: $spacing-unit;
+
+  @include mobile {
+    gap: $spacing-unit / 2;
+  }
+}
+
+.thumbnail-image {
+  img {
+    @include transition(opacity);
+  }
+
+  @include mobile {
+    margin: 5px !important;
+  }
+}
+
+.no-image {
+  min-height: 300px;
+  @include flex-center;
+  background-color: $background-light;
+  border: 1px solid $border-color;
+
+  @include mobile {
+    min-height: 200px;
+  }
+}
+
+// Page title styles
 .display-5 {
   font-weight: 700;
   color: #3a3a3a;
+
+  @include mobile {
+    font-size: 1.8rem;
+  }
 }
 
-/* Category tag styles */
+// Category tag styles
 .badge {
   font-size: 0.75rem;
   padding: 0.5em 0.8em;
 }
 
-/* Price tag styles */
+// Price tag styles
 .text-primary.fw-bold {
   font-size: 1.1rem;
 }
 
-/* Global link styles */
+// Global link styles
 a {
   text-decoration: none;
-  transition: color 0.2s ease;
+  @include transition(color);
+
+  &:hover {
+    color: $primary-hover;
+  }
 }
 
-a:hover {
-  color: #0056b3;
-}
-
-/* Navigation menu styling */
+// Navigation menu styling
 .navbar {
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  @include box-shadow;
+
+  &-brand {
+    font-weight: 700;
+    color: $primary-color !important;
+  }
+
+  @include mobile {
+    .navbar-nav {
+      margin-top: 0.5rem;
+    }
+  }
 }
 
-.navbar-brand {
-  font-weight: 700;
-  color: #0d6efd !important;
-}
-
-/* Footer styling */
-footer {
-  border-top: 1px solid #eaeaea;
-  padding-top: 2rem !important;
-  padding-bottom: 2rem !important;
-  margin-top: 3rem !important;
-}
-
+// Dropdown menu styling
 .dropdown-menu {
   margin-top: 0;
 }
 
 .nav-item.dropdown:hover .dropdown-menu {
   display: block;
+
+  @include mobile {
+    position: static;
+    float: none;
+    width: auto;
+    margin-top: 0;
+    background-color: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+}
+
+// Footer styling
+footer {
+  border-top: 1px solid #eaeaea;
+  padding-top: $spacing-unit * 2 !important;
+  padding-bottom: $spacing-unit * 2 !important;
+  margin-top: $spacing-unit * 3 !important;
+
+  @include mobile {
+    text-align: center;
+
+    .text-end {
+      text-align: center !important;
+      margin-top: 1rem;
+    }
+  }
+}
+
+// Custom border for section headings
+.border-thick {
+  border-width: $border-width-thick !important;
+
+  @include mobile {
+    width: 50% !important;
+  }
+}
+
+// Large icons
+.icon-large {
+  @include icon-size($icon-large-size);
+
+  @include mobile {
+    @include icon-size($icon-large-size * 0.75);
+  }
+}
+
+// Cart quantity input group
+.cart-quantity-input {
+  width: $cart-input-width;
+
+  @include mobile {
+    width: 100%;
+  }
+}
+
+// Cart styling
+.cart-items {
+  .table td {
+    vertical-align: middle;
+  }
+
+  @include mobile {
+    .table {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+}
+
+.quantity-input {
+  width: $quantity-input-width;
+
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.cart-item-image {
+  @include square-thumbnail($cart-item-thumbnail-size);
+}
+
+// Product details page responsive styles
+.product-details {
+  @include mobile {
+    font-size: 0.9rem;
+  }
+}
+
+// Responsive grid adjustments
+.row-cols-1 {
+  @include tablet {
+    &.row-cols-md-3 {
+      & > * {
+        flex: 0 0 auto;
+        width: 50%;
+      }
+    }
+  }
+}
+
+// Responsive form controls
+.form-control.w-25 {
+  @include tablet {
+    width: 50% !important;
+  }
+
+  @include mobile {
+    width: 100% !important;
+  }
+}
+
+// Adjust button groups for mobile
+.btn-group {
+  @include mobile {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .btn {
+      width: 100%;
+      margin-bottom: 0.5rem;
+      border-radius: 0.25rem !important;
+    }
+  }
+}
+
+// Make images responsive
+.img-fluid, .card-img-top {
+  max-width: 100%;
+  height: auto;
+}
+
+// Add spacing in mobile view
+.container {
+  @include mobile {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+// Browser compatibility styles
+#browser-warning {
+  z-index: 1050;
+  position: relative;
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+// CSS fallbacks for older browsers
+input[type="number"] {
+  -moz-appearance: textfield;
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+// Ensure flexbox fallbacks
+.d-flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.align-items-center {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.justify-content-center {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.justify-content-between {
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+// Ensure transforms work in older browsers
+.hover-card:hover {
+  -webkit-transform: translateY(-5px);
+  -ms-transform: translateY(-5px);
+  transform: translateY(-5px);
+}
+
+@include mobile {
+  .hover-card:hover {
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+  }
 }

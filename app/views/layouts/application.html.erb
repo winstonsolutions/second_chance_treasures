@@ -16,6 +16,20 @@
   </head>
 
   <body>
+    <!-- Browser compatibility check -->
+    <div id="browser-warning" class="alert alert-warning alert-dismissible fade show d-none" role="alert">
+      <div class="container">
+        <div class="d-flex align-items-center">
+          <i class="fas fa-exclamation-triangle me-3 fs-4"></i>
+          <div>
+            <strong>Your browser is not supported.</strong>
+            <p class="mb-0">Please upgrade your browser to continue using all features of our store.</p>
+          </div>
+          <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+
     <%= render 'layouts/header' %>
 
     <% if notice %>
@@ -48,7 +62,39 @@
       </div>
     </footer>
 
-    <!-- 将 Bootstrap JS 移到 body 结束标签之前 -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Browser compatibility script -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Browser detection
+        function detectBrowser() {
+          const ua = window.navigator.userAgent;
+          const msie = ua.indexOf('MSIE ');
+          const trident = ua.indexOf('Trident/');
+          const edge = ua.indexOf('Edge/');
+          const operaOld = ua.indexOf('Opera/');
+          const operaMini = ua.indexOf('Opera Mini');
+
+          // Check for outdated browsers
+          if (msie > 0 || trident > 0 ||
+              (edge > 0 && parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10) < 18) ||
+              operaOld > 0 || operaMini > 0) {
+
+            // For completely incompatible browsers, redirect to the browser not supported page
+            if (msie > 0 || trident > 0 || operaOld > 0) {
+              window.location.href = '<%= browser_not_supported_path %>';
+              return;
+            }
+
+            // For partially incompatible browsers, show warning
+            document.getElementById('browser-warning').classList.remove('d-none');
+          }
+        }
+
+        detectBrowser();
+      });
+    </script>
   </body>
 </html>

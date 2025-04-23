@@ -5,11 +5,11 @@
   <!-- Page title with decorative underline -->
   <div class="mb-4">
     <h1 class="display-5 fw-bold">Explore Second-hand Treasures</h1>
-    <div class="border-bottom border-primary w-25 mb-3" style="border-width: 3px !important;"></div>
+    <div class="border-bottom border-primary w-25 mb-3 border-thick"></div>
   </div>
 
   <!-- Add filter buttons -->
-  <div class="mb-4">
+  <div class="mb-4 filter-buttons">
     <div class="btn-group" role="group" aria-label="Product filters">
       <%= link_to "All Products", products_path, class: "btn #{!params[:filter] ? 'btn-primary' : 'btn-outline-primary'}" %>
       <%= link_to "On Sale", products_path(filter: 'on_sale'), class: "btn #{params[:filter] == 'on_sale' ? 'btn-primary' : 'btn-outline-primary'}" %>
@@ -21,15 +21,15 @@
   <p class="lead mb-4">Browse our curated selection of quality second-hand items to add practicality and joy to your life, while contributing to environmental sustainability.</p>
 
   <!-- Product list using responsive grid layout -->
-  <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
     <% @products.each do |product| %>
       <div class="col">
         <div class="card h-100 shadow-sm hover-card">
           <!-- Product image -->
           <% if product.image.attached? %>
-            <%= image_tag product.image.variant(:medium), class: 'card-img-top', style: 'height: 300px; object-fit: cover;' %>
+            <%= image_tag product.image.variant(:medium), class: 'card-img-top product-img' %>
           <% elsif product.images.attached? %>
-            <%= image_tag product.images.first.variant(:medium), class: 'card-img-top', style: 'height: 300px; object-fit: cover;' %>
+            <%= image_tag product.images.first.variant(:medium), class: 'card-img-top product-img' %>
           <% else %>
             <div class="no-image text-center p-5 bg-light">
               <span>No Image Available</span>
@@ -63,3 +63,26 @@
     <%= paginate @products %>
   </div>
 </div>
+
+<% content_for :styles do %>
+<style>
+  /* Additional responsive styles for product cards */
+  @media (max-width: 576px) {
+    .filter-buttons .btn-group {
+      width: 100%;
+    }
+
+    .card-title {
+      font-size: 1rem;
+    }
+
+    .lead {
+      font-size: 1rem;
+    }
+
+    .pagination {
+      flex-wrap: wrap;
+    }
+  }
+</style>
+<% end %>

@@ -7,6 +7,23 @@
 // For example, to change the sidebar width:
 // $sidebar-width: 242px;
 
+// SCSS Variables
+$spacing: 10px;
+$image-size: 100px;
+$primary-blue: #6090DB;
+
+// Mixins
+@mixin flex-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@mixin image-container {
+  width: $image-size;
+  height: $image-size;
+  overflow: hidden;
+}
+
 // Active Admin's got SASS!
 @import "active_admin/mixins";
 @import "active_admin/base";
@@ -14,30 +31,35 @@
 // Overriding any non-variable Sass must be done after the fact.
 // For example, to change the default status-tag color:
 //
-//   .status_tag { background: #6090DB; }
+// .status_tag { background: $primary-blue; }
 
-// 您的自定义样式
+// Custom admin styles
 .admin-custom-class {
-  // 自定义样式
+  padding: $spacing;
+
+  &:hover {
+    background-color: lighten($primary-blue, 40%);
+  }
 }
 
 .image-list {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  @include flex-container;
+  gap: $spacing;
 }
 
 .image-item {
-  width: 100px;
-  height: 100px;
-  overflow: hidden;
+  @include image-container;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 }

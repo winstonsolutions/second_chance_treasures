@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   # Set about and contact page routes
   get '/about', to: 'pages#show', defaults: { slug: 'about' }
   get '/contact', to: 'pages#show', defaults: { slug: 'contact' }
-
+  get 'browser-not-supported', to: 'pages#browser_not_supported', as: 'browser_not_supported'
 
   # Add resources for products
   resources :products, only: [:index, :show, :new, :create]

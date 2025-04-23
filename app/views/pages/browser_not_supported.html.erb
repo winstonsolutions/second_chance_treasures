@@ -1,0 +1,100 @@
+<!-- app/views/pages/browser_not_supported.html.erb -->
+<div class="container unsupported-browser-page">
+  <div class="row justify-content-center py-5">
+    <div class="col-lg-8 col-md-10 text-center">
+      <div class="browser-icon mb-4">
+        <i class="fas fa-exclamation-circle"></i>
+      </div>
+
+      <h1 class="mb-4">Your Browser Is Not Supported</h1>
+
+      <p class="lead mb-4">
+        We've detected that you're using an unsupported browser that may not work correctly with our website.
+        For the best shopping experience, please upgrade to one of these modern browsers:
+      </p>
+
+      <div class="row row-cols-2 row-cols-md-4 g-4 mb-5">
+        <div class="col">
+          <div class="card h-100 border-0 browser-card">
+            <div class="card-body text-center">
+              <i class="fab fa-chrome fa-3x mb-3"></i>
+              <h5 class="card-title">Chrome</h5>
+              <a href="https://www.google.com/chrome/" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener">Download</a>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100 border-0 browser-card">
+            <div class="card-body text-center">
+              <i class="fab fa-firefox fa-3x mb-3"></i>
+              <h5 class="card-title">Firefox</h5>
+              <a href="https://www.mozilla.org/firefox/" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener">Download</a>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100 border-0 browser-card">
+            <div class="card-body text-center">
+              <i class="fab fa-safari fa-3x mb-3"></i>
+              <h5 class="card-title">Safari</h5>
+              <a href="https://www.apple.com/safari/" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener">Download</a>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100 border-0 browser-card">
+            <div class="card-body text-center">
+              <i class="fab fa-edge fa-3x mb-3"></i>
+              <h5 class="card-title">Edge</h5>
+              <a href="https://www.microsoft.com/edge" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener">Download</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 text-center">
+        <a href="/" class="btn btn-primary">Try to Continue Anyway</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for :styles do %>
+<style>
+  .unsupported-browser-page {
+    padding: 2rem 0;
+  }
+
+  .browser-icon i {
+    font-size: 5rem;
+    color: #ffc107;
+  }
+
+  .browser-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .browser-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+
+  .fab {
+    color: #555;
+  }
+
+  @media (max-width: 576px) {
+    .browser-icon i {
+      font-size: 3rem;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+    }
+
+    .lead {
+      font-size: 1rem;
+    }
+  }
+</style>
+<% end %>

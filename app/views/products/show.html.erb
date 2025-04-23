@@ -11,8 +11,8 @@
   </nav>
 
   <div class="row">
-    <div class="col-md-6">
-      <!-- 主图片显示区域 -->
+    <div class="col-lg-6 col-md-12 mb-4">
+      <!-- Main image display area -->
       <div class="main-image mb-3">
         <% if @product.image.attached? %>
           <%= image_tag @product.image.variant(:medium), class: 'img-fluid main-product-image' %>
@@ -25,9 +25,9 @@
         <% end %>
       </div>
 
-      <!-- 附加图片缩略图区域 -->
+      <!-- Additional image thumbnails area -->
       <% if @product.images.attached? %>
-        <div class="thumbnail-images d-flex flex-wrap">
+        <div class="thumbnail-images d-flex flex-wrap justify-content-start">
           <% @product.images.each do |image| %>
             <div class="thumbnail-image m-2">
               <%= image_tag image.variant(:thumb), class: 'img-thumbnail', style: 'width: 100px; height: 100px; object-fit: cover;' %>
@@ -37,9 +37,9 @@
       <% end %>
     </div>
 
-    <div class="col-md-6">
-      <h1><%= @product.title %></h1>
-      <p class="lead"><%= number_to_currency(@product.price) %></p>
+    <div class="col-lg-6 col-md-12">
+      <h1 class="product-title"><%= @product.title %></h1>
+      <p class="lead product-price"><%= number_to_currency(@product.price) %></p>
 
       <div class="product-details mb-4">
         <p><strong>Condition:</strong> <%= @product.condition %></p>
@@ -57,9 +57,12 @@
       <% if @product.quantity > 0 %>
         <%= form_tag add_to_cart_path(@product), method: :post, class: 'mb-4' do %>
           <div class="form-group">
-            <%= number_field_tag :quantity, 1, min: 1, max: @product.quantity, class: 'form-control w-25 mb-3' %>
+            <div class="d-flex align-items-center quantity-selector">
+              <label for="quantity" class="me-3">Quantity:</label>
+              <%= number_field_tag :quantity, 1, min: 1, max: @product.quantity, class: 'form-control quantity-input mb-3' %>
+            </div>
           </div>
-          <%= submit_tag 'Add to Cart', class: 'btn btn-primary' %>
+          <%= submit_tag 'Add to Cart', class: 'btn btn-primary btn-lg' %>
         <% end %>
       <% else %>
         <p class="text-danger">Out of stock</p>
@@ -79,13 +82,56 @@
       cursor: pointer;
       opacity: 0.8;
     }
+
+    /* Responsive styles */
+    @media (max-width: 576px) {
+      .main-product-image {
+        max-height: 300px;
+      }
+
+      .product-title {
+        font-size: 1.5rem;
+        margin-top: 1rem;
+      }
+
+      .product-price {
+        font-size: 1.2rem;
+      }
+
+      .thumbnail-image {
+        width: calc(25% - 10px);
+      }
+
+      .quantity-selector {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .quantity-input {
+        width: 100% !important;
+      }
+
+      .btn-lg {
+        width: 100%;
+      }
+    }
+
+    @media (min-width: 577px) and (max-width: 991px) {
+      .thumbnail-image {
+        width: calc(20% - 10px);
+      }
+
+      .quantity-input {
+        width: 50% !important;
+      }
+    }
   </style>
 <% end %>
 
 <% content_for :scripts do %>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // 点击缩略图切换主图
+      // Click thumbnails to change main image
       const thumbnails = document.querySelectorAll('.thumbnail-image img');
       const mainImage = document.querySelector('.main-product-image');
 
