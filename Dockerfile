@@ -74,9 +74,6 @@ RUN groupadd --system --gid 1000 rails && \
     chown -R rails:rails db log storage tmp
 USER 1000:1000
 
-# Modify docker-entrypoint script to work without RAILS_MASTER_KEY
-RUN sed -i 's/.*rails db:prepare.*/  RAILS_MASTER_KEY=dummykey SECRET_KEY_BASE=dummyvalue ./bin\/rails db:prepare/' /rails/bin/docker-entrypoint
-
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
